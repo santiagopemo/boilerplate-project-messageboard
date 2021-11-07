@@ -7,8 +7,26 @@ const cors        = require('cors');
 const apiRoutes         = require('./routes/api.js');
 const fccTestingRoutes  = require('./routes/fcctesting.js');
 const runner            = require('./test-runner');
+const helmet = require("helmet");
+require('./db-connection')
+
 
 const app = express();
+
+app.use(helmet.frameguard({action: 'sameorigin'}));
+app.use(helmet.dnsPrefetchControl());
+app.use(
+  helmet.referrerPolicy({
+    policy: ["same-origin"]
+  })
+);
+
+// logger middleware
+// const simpleLogger = (req, res, next) => {
+//     console.log(`${req.method} ${req.path} - ${req.ip}`);
+//     next();
+// }
+// app.use(simpleLogger);
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
